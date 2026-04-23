@@ -21,6 +21,73 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     exit
 }
 
+# ==============================================================================
+# AUTO-UPDATE (GitHub Releases, version.txt, Offline-Fallback)
+# ==============================================================================
+$GH_USER  = "SWA-Roemer"
+$GH_REPO  = "Bloatware_Removal"
+
+$headers = @{
+    Accept        = "application/vnd.github+json"
+}
+
+$selfPath    = $MyInvocation.MyCommand.Path
+$scriptDir   = Split-Path -Parent $selfPath
+$versionFile = Join-Path $scriptDir "version.txt"
+
+# Lokale Version lesen (falls Datei fehlt → "v0.0.0" als Fallback)
+if (Test-Path $versionFile) {
+    $localVersion = (Get-Content $versionFile -Raw).Trim()
+} else {
+    $localVersion = "v0.0.0"
+    Write-Host "==> Info - Keine version.txt gefunden, nehme $localVersion an." -ForegroundColor Gray
+}
+
+Write-Host "==> Lokale Version: $localVersion" -ForegroundColor Cyan
+
+try {
+    # Neuesten Release von GitHub abrufen
+    $releaseApi = "https://api.github.com/repos/$GH_USER/$GH_REPO/releases/latest"
+    $release    = Invoke-RestMethod -Uri $releaseApi -Headers $headers -TimeoutSec 5
+
+    $remoteVersion = $release.tag_name  # z.B. "v1.2.0"
+    Write-Host "==> Remote Version:  $remoteVersion" -ForegroundColor Cyan
+
+    if ([version]($remoteVersion -replace 'v','') -gt [version]($localVersion -replace 'v','')) {
+        Write-Host "==> Neue Version verfuegbar! Update wird geladen..." -ForegroundColor Yellow
+
+        # Skript herunterladen (aus dem getaggten Commit)
+        $rawUrl    = "https://raw.githubusercontent.com/$GH_USER/$GH_REPO/refs/tags/$remoteVersion/skript.ps1"
+        $newScript = (Invoke-WebRequest -Uri $rawUrl -Headers $headers -UseBasicParsing -TimeoutSec 10).Content
+
+        # Backup anlegen
+        Copy-Item -Path $selfPath -Destination "$selfPath.bak" -Force
+
+        # Neues Skript speichern
+        Set-Content -Path $selfPath -Value $newScript -Encoding UTF8
+
+        # Version lokal aktualisieren
+        Set-Content -Path $versionFile -Value $remoteVersion -Encoding UTF8
+
+        Write-Host "==> Update auf $remoteVersion erfolgreich! Neustart..." -ForegroundColor Green
+        Start-Sleep -Seconds 2
+
+        Start-Process powershell -ArgumentList "-ExecutionPolicy Bypass -File `"$selfPath`"" -Verb RunAs
+        exit
+
+    } else {
+        Write-Host "==> Skript ist aktuell, kein Update noetig." -ForegroundColor Green
+    }
+
+} catch {
+    Write-Host "==> Info - Offline oder Fehler, nutze lokale Version ($localVersion)" -ForegroundColor Gray
+}
+
+Write-Host ""
+# ==============================================================================
+# ENDE AUTO-UPDATE
+# ==============================================================================
+
 Write-Host "============================================================" -ForegroundColor Cyan
 Write-Host "     Windows Bloatware Entfernungs-Skript Vorbereitung" -ForegroundColor Cyan
 Write-Host "============================================================" -ForegroundColor Cyan
