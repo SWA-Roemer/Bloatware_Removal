@@ -25,7 +25,7 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 # AUTO-UPDATE (GitHub Releases, version.txt, Offline-Fallback)
 # ==============================================================================
 $GH_USER  = "SWA-Roemer"
-$GH_REPO  = "Bloatware_Removal"
+$GH_REPO  = "Win11_Grundskript"
 
 $headers = @{
     Accept        = "application/vnd.github+json"

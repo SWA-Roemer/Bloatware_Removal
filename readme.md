@@ -1,19 +1,17 @@
-# Windows Bloatware Remover Custom Script
+# Windows 11 Grundskript
 
-Ein Satz von PowerShell-Skripten und Konfigurationsdateien, um Windows-Installationen von unerwünschter Bloatware zu befreien. Das Skript entfernt vorinstallierte Apps, Bing-Dienste, Xbox-Komponenten und optional Microsoft 365.
+Ein Satz von PowerShell-Skripten und Konfigurationsdateien, um Windows-Installationen konsequent auf einen bestimmten Stand zu bringen. Es entfernt außerdem unerwünschte vorinstallierte Windows 11 Services.
 
 ## 🚀 Funktionen
 
 - **Vollständig anpassbar:** Apps werden über einfache Textdateien gesteuert.
-- **Zwei Profile:** - `apps_standard.txt`: Entfernt alles inklusive Microsoft 365 / Office.
-    - `apps_exkl_m365.txt`: Entfernt Bloatware, lässt Microsoft 365 jedoch installiert.
 - **Automatisierung:** Einfacher Start über eine Batch-Datei (`.bat`) mit Administratorrechten.
 - **Sauberes System:** Entfernt Überreste von Bing, Xbox, Teams und Telemetrie-bezogenen Apps.
 
 ## 📂 Dateistruktur
 
 - `execute_grundskript.bat`: Der "One-Click" Starter. Ruft das PowerShell-Skript mit den richtigen Berechtigungen auf.
-- `main_script.ps1`: Das Hauptskript, welches die Listen einliest und die Deinstallation durchführt.
+- `windows_grundskript.ps1`: Das Hauptskript, welches die Listen einliest und die Deinstallation durchführt.
 - `apps_standard.txt`: Liste aller zu entfernenden Apps (inkl. Office).
 - `apps_exkl_m365.txt`: Liste aller zu entfernenden Apps (exkl. Office).
 
