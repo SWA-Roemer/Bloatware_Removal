@@ -57,7 +57,7 @@ try {
         Write-Host "==> Neue Version verfuegbar! Update wird geladen..." -ForegroundColor Yellow
 
         # Skript herunterladen (aus dem getaggten Commit)
-        $rawUrl    = "https://raw.githubusercontent.com/$GH_USER/$GH_REPO/refs/tags/$remoteVersion/skript.ps1"
+        $rawUrl    = "https://raw.githubusercontent.com/$GH_USER/$GH_REPO/refs/tags/$remoteVersion/windows_grundskript.ps1"
         $newScript = (Invoke-WebRequest -Uri $rawUrl -Headers $headers -UseBasicParsing -TimeoutSec 10).Content
 
         # Backup anlegen
