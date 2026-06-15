@@ -4,7 +4,8 @@
 # WICHTIG: Als Administrator starten!
 
 $step = 0
-$totalSteps = 13
+$totalSteps = 14
+$restart_explorer = $false
 
 # ==============================================================================
 # ADMIN-CHECK
@@ -205,6 +206,19 @@ Write-Host ""
 . "$scriptPath\modules\11_telemetry.ps1"
 . "$scriptPath\modules\12_bing_search.ps1"
 . "$scriptPath\modules\13_lockscreen.ps1"
+. "$scriptPath\modules\14_desktop_symbols.ps1"
+
+
+if ($restart_explorer)
+{
+    Write-Host "==> Info - Explorer wird neu gestartet..." -ForegroundColor Gray
+    Stop-Process -Name explorer -Force
+    Start-Sleep -Seconds 1
+    Start-Process explorer.exe
+} else
+{
+    Write-Host "===> Info - Explorer-Einstellungen sind bereits korrekt." -ForegroundColor Gray
+}
 Write-Host ""
 Write-Host ""
 Write-Host "============================================================" -ForegroundColor Cyan
