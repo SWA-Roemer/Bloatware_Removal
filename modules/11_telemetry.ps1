@@ -5,7 +5,7 @@ Write-Step "Deaktiviere Telemetrie und Datenerfassung..."
 
 if (Confirm-Step "Telemetrie, Cortana, Werbe-ID und Activity History deaktivieren")
 {
-    foreach ($svc in @("DiagTrack", "dmwappushservice"))
+    foreach ($svc in @("DiagTrack", "dmwappushservice", "CscService", "MapsBroker", "StorSvc", "SharedAccesss"))
     {
         try
         {
@@ -45,6 +45,7 @@ if (Confirm-Step "Telemetrie, Cortana, Werbe-ID und Activity History deaktiviere
     if (-not (Test-Path $activityPath))
     { New-Item -Path $activityPath -Force | Out-Null
     }
+
     Set-ItemProperty -Path $activityPath -Name "PublishUserActivities" -Value 0 -Type DWord -Force
     Set-ItemProperty -Path $activityPath -Name "EnableActivityFeed"    -Value 0 -Type DWord -Force
     Set-ItemProperty -Path $activityPath -Name "UploadUserActivities"  -Value 0 -Type DWord -Force
@@ -54,6 +55,7 @@ if (Confirm-Step "Telemetrie, Cortana, Werbe-ID und Activity History deaktiviere
     if (-not (Test-Path $cortanaPath))
     { New-Item -Path $cortanaPath -Force | Out-Null
     }
+
     Set-ItemProperty -Path $cortanaPath -Name "AllowCortana" -Value 0 -Type DWord -Force
     Write-Host "==> Success - Cortana deaktiviert." -ForegroundColor Green
 
@@ -61,6 +63,7 @@ if (Confirm-Step "Telemetrie, Cortana, Werbe-ID und Activity History deaktiviere
     if (-not (Test-Path $advPath))
     { New-Item -Path $advPath -Force | Out-Null
     }
+
     Set-ItemProperty -Path $advPath -Name "Enabled" -Value 0 -Type DWord -Force
     Write-Host "==> Success - Werbe-ID deaktiviert." -ForegroundColor Green
 
