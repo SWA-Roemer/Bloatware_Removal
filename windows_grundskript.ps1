@@ -46,6 +46,33 @@ function Select-ExecutionMode
     }
 }
 
+# ==============================================================================
+# MODUS WÄHLEN
+# ==============================================================================
+$ExecutionMode = Select-ExecutionMode
+
+Write-Host ""
+
+switch ($ExecutionMode)
+{
+    "manual"
+    {
+        Write-Host "==> Manueller Modus aktiv - Jeden Schritt einzeln erledigen." -ForegroundColor Yellow
+    }
+    "auto"
+    {
+        Write-Host "==> Automatischer Modus aktiv - Alle Schritte werden aktiviert." -ForegroundColor Green
+    }
+    "dev"
+    {
+        Write-Host "==> Entwicklungsmodus aktiv - Alle Schritte werden aktiviert ohne automatisches Update" -ForegroundColor Green
+    }
+    default
+    {
+        Write-Host "==> Kein Modus gefunden. Kontaktiere den Entwickler!" -ForegroundColor Red
+    }
+}
+
 function Confirm-Step($stepName)
 {
     if ($script:ExecutionMode -eq "manual")
@@ -129,7 +156,7 @@ if ($script:ExecutionMode -eq "dev")
                 # Backup des aktuellen Verzeichnisses anlegen
                 $backupDir = "$scriptDir.bak"
                 if (Test-Path $backupDir)
-                { Remove-Item $backupDir -Recurse -Force 
+                { Remove-Item $backupDir -Recurse -Force
                 }
                 Copy-Item -Path $scriptDir -Destination $backupDir -Recurse -Force
                 Write-Host "==> Info - Backup angelegt unter: $backupDir" -ForegroundColor Gray
@@ -154,42 +181,6 @@ if ($script:ExecutionMode -eq "dev")
     }
 }
 
-Write-Host ""
-
-# ==============================================================================
-# MODUS WÄHLEN
-# ==============================================================================
-$ExecutionMode = Select-ExecutionMode
-
-Write-Host ""
-
-switch ($ExecutionMode)
-{
-    "manual"
-    {
-        Write-Host "==> Manueller Modus aktiv - Jeden Schritt einzeln erledigen." -ForegroundColor Yellow
-    }
-    "auto"
-    {
-        Write-Host "==> Automatischer Modus aktiv - Alle Schritte werden aktiviert." -ForegroundColor Green
-    }
-    "dev"
-    {
-        Write-Host "==> Entwicklungsmodus aktiv - Alle Schritte werden aktiviert ohne automatisches Update" -ForegroundColor Green
-    }
-    default
-    {
-        Write-Host "==> Kein Modus gefunden. Kontaktiere den Entwickler!" -ForegroundColor Red
-    }
-}
-
-if ($ExecutionMode -eq "manual")
-{
-
-} else
-{
-
-}
 Write-Host ""
 
 $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
